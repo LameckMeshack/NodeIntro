@@ -33,7 +33,30 @@ async function getIntern(req, res, id) {
     console.log(error);
   }
 }
+//
+//@desc Create new intern
+//@route POST /api/interns/
+async function createIntern(req, res) {
+  try {
+    // const intern = await Interns.createIntern(req.body);
+    const intern = {
+      id: Math.floor(Math.random() * 10 + 5),
+      name: "Test Name",
+      location: "Test Location",
+    };
+
+    const newIntern = await Interns.createIntern(intern);
+
+    res.statusCode = 201;
+    res.setHeader("Content-Type", "text/html");
+    return res.end(JSON.stringify(newIntern));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   getInterns,
   getIntern,
+  createIntern,
 };

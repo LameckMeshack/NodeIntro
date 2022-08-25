@@ -1,4 +1,5 @@
 const interns = require("./internData.js");
+const { writeDataToFile } = require("./utils.js");
 function getAllInterns() {
   return new Promise((resolve, reject) => {
     resolve(interns);
@@ -12,14 +13,14 @@ function getIntern(id) {
   });
 }
 
-function create(product) {
+function createIntern(intern) {
   return new Promise((resolve, reject) => {
-    const newProduct = { id: uuidv4(), ...product };
-    products.push(newProduct);
-    if (process.env.NODE_ENV !== "test") {
-      writeDataToFile("./data/products.json", products);
-    }
-    resolve(newProduct);
+    const newIntern = { id: Math.floor(Math.random() * 10 + 5), ...intern };
+    interns.push(newIntern);
+
+    writeDataToFile("./data/interns.json", interns);
+
+    resolve(newIntern);
   });
 }
 
@@ -47,4 +48,5 @@ function create(product) {
 module.exports = {
   getAllInterns,
   getIntern,
+  createIntern,
 };
