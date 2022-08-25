@@ -1,5 +1,10 @@
 const http = require("http"); // importing core http modeule
-const { getInterns, getIntern, createIntern } = require("./internControllers"); // importing getAllInterns function from internRoutes.js
+const {
+  getInterns,
+  getIntern,
+  createIntern,
+  updateIntern,
+} = require("./internControllers"); // importing getAllInterns function from internRoutes.js
 
 //hosting locally
 const fs = require("fs");
@@ -19,6 +24,9 @@ const server = http.createServer(async (req, res) => {
     getIntern(req, res, id);
   } else if (url === "/api/interns" && req.method === "POST") {
     createIntern(req, res);
+  } else if (url.match(/\/api\/interns\/([0-9]+)/) && req.method === "PUT") {
+    const id = +req.url.split("/")[3];
+    updateIntern(req, res, id);
   } else {
     res.statusCode = 404;
     res.setHeader("Content-Type", "text/html");

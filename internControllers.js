@@ -1,4 +1,5 @@
 const Interns = require("./internRoutes");
+const { getPostData } = require("./utils");
 
 //@desc Get all interns
 //@route GET /api/interns/
@@ -64,47 +65,58 @@ async function createIntern(req, res) {
     console.log(error);
   }
 }
-//@desc Update intern
-//@route PUT /api/interns/:id
+// @desc    Update a Intern
+// @route   PUT /api/intern/:id
 async function updateIntern(req, res, id) {
   try {
-    const intern = await Interns.updateIntern(id, req.body);
+    const intern = await Interns.getIntern(id);
+
     if (!intern) {
-      //if no intern found
-      res.statusCode = 404;
-      res.setHeader("Content-Type", "text/html");
-      res.end(JSON.stringify({ message: "Intern not found" }));
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: "Intern Not Found" }));
     } else {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "text/html");
-      res.end(JSON.stringify(intern));
+      const body = await getPostData(req);
+
+      const { name, location } = JSON.parse(body);
+
+      const internData = {
+        name: name || intern.name,
+        location: location || intern.location,
+      };
+
+      const updateIntern = await Interns.updateIntern(id, internData);
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify(updateIntern));
     }
   } catch (error) {
     console.log(error);
   }
 }
-//@desc Delete intern
-//@route DELETE /api/interns/:id
-// async function deleteIntern(req, res, id) {
-//     try {
-//         const intern = await Interns.deleteIntern(id);
-//         if (!intern) {
-//             //if no intern found
-//             res.statusCode = 404;
-//             res.setHeader("Content-Type", "text/html");
-//             res.end(JSON.stringify({ message: "Intern not found" }));
-//         } else {
-//             res.statusCode = 200;
-//             res.setHeader("Content-Type", "text/html");
-//             res.end(JSON.stringify(intern));
-//         }
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
+
+// @desc    Delete Intern
+// @route   DELETE /api/intern/:id
+async function deleteIntern(req, res, id) {
+  try {
+    const intern = await Interns.getIntern(id);
+
+    if (!intern) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: "intern Not Found" }));
+    } else {
+      await Interns.remove(id);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ message: `Intern ${id} removed` }));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = {
   getInterns,
   getIntern,
   createIntern,
+  updateIntern,
+  deleteIntern,
 };

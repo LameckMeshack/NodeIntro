@@ -27,7 +27,7 @@ function createIntern(intern) {
 function updateIntern(id, intern) {
   return new Promise((resolve, reject) => {
     const index = interns.findIndex((i) => i.id === id);
-    products[index] = { id, ...product };
+    interns[index] = { id, ...intern };
 
     writeDataToFile("./data/interns.json", interns);
 
@@ -35,19 +35,20 @@ function updateIntern(id, intern) {
   });
 }
 
-// function remove(id) {
-//   return new Promise((resolve, reject) => {
-//     products = products.filter((p) => p.id !== id);
-//     if (process.env.NODE_ENV !== "test") {
-//       writeDataToFile("./data/products.json", products);
-//     }
-//     resolve();
-//   });
-// }
+function deleteIntern(id) {
+  return new Promise((resolve, reject) => {
+    interns = interns.filter((i) => i.id !== id);
+    if (process.env.NODE_ENV !== "test") {
+      writeDataToFile("./data/interns.json", interns);
+    }
+    resolve();
+  });
+}
 
 module.exports = {
   getAllInterns,
   getIntern,
   createIntern,
   updateIntern,
+  deleteIntern,
 };
