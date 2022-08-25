@@ -38,9 +38,9 @@ function updateIntern(id, intern) {
 function deleteIntern(id) {
   return new Promise((resolve, reject) => {
     interns = interns.filter((i) => i.id !== id);
-    if (process.env.NODE_ENV !== "test") {
-      writeDataToFile("./data/interns.json", interns);
-    }
+
+    writeDataToFile("./data/interns.json", interns);
+
     resolve();
   });
 }

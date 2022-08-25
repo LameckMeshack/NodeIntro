@@ -4,6 +4,7 @@ const {
   getIntern,
   createIntern,
   updateIntern,
+  deleteIntern,
 } = require("./internControllers"); // importing getAllInterns function from internRoutes.js
 
 //hosting locally
@@ -27,6 +28,9 @@ const server = http.createServer(async (req, res) => {
   } else if (url.match(/\/api\/interns\/([0-9]+)/) && req.method === "PUT") {
     const id = +req.url.split("/")[3];
     updateIntern(req, res, id);
+  } else if (url.match(/\/api\/interns\/([0-9]+)/) && req.method === "DELETE") {
+    let id = +req.url.split("/")[3];
+    deleteIntern(req, res, id);
   } else {
     res.statusCode = 404;
     res.setHeader("Content-Type", "text/html");

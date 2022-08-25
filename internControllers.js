@@ -104,7 +104,7 @@ async function deleteIntern(req, res, id) {
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: "intern Not Found" }));
     } else {
-      await Interns.remove(id);
+      await Interns.deleteIntern(id);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ message: `Intern ${id} removed` }));
     }
