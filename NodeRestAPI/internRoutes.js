@@ -1,4 +1,4 @@
-const interns = require("./internData.js");
+let interns = require("./internData.js");
 const { writeDataToFile } = require("./utils.js");
 function getAllInterns() {
   return new Promise((resolve, reject) => {
